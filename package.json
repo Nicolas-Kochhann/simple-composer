@@ -1,0 +1,36 @@
+{
+  "name": "simple-composer",
+  "version": "1.0.0",
+  "description": "Simple, type-safe dependency composition for TypeScript.",
+  "keywords": [
+    "compose",
+    "composer",
+    "composition",
+    "composition-root",
+    "root",
+    "container",
+    "service-provider",
+    "provider",
+    "app-container",
+    "typescript",
+    "simple"
+  ],
+  "homepage": "https://github.com/Nicolas-Kochhann/simple-composer#readme",
+  "bugs": {
+    "url": "https://github.com/Nicolas-Kochhann/simple-composer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nicolas-Kochhann/simple-composer.git"
+  },
+  "license": "MIT",
+  "author": "Nícolas Kochhann",
+  "type": "module",
+  "main": "index.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "test"
+  }
+}
