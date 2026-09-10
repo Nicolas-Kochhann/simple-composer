@@ -1,18 +1,17 @@
+import { Provider } from "../provider/Provider.js";
+
 export class Container 
 {
-    // private providers: Map<any, Provider<any>>;
-    private _instances: Map<any, object>;
-
-    constructor(){}
-
-    // constructor(composer: Composer)
-    // {
-    //     composer
-    // };
-
-    public get instances(): <T>[]
-    {
-        return Array.from(this._instances.values());
-    }
+    [key: string]: Provider<T>;
     
+    constructor(providers: Provider<T>[]){
+        
+
+        return new Proxy(this, () => {
+
+        })
+    }
+
+    createProperty(factory: Factory<T>, singleton)
+
 }

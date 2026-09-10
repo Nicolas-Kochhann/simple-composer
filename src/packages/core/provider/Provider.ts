@@ -2,17 +2,25 @@ import { Factory } from "./provider";
 
 export class Provider<T>
 {
-    private factory: Factory;
-    private dependencies: Dependency[];
+    private _instance?: T;
+    private _factory: Factory<T>;
+    private _singleton: boolean;
 
-    constructor(factory: Factory)
+    constructor(factory: Factory<T>, singleton: boolean)
     {
-        this.factory = factory;
-        this.dependencies = factory.arguments
+        this._factory = factory;
+        this._singleton = singleton;
     }
 
-    public resolve<T>(): T
+    public resolve(): T 
     {
-        return this.factory();
+        if (this._singleton){
+            if(this._instance) return this._instance;
+            
+            this._instance = this._factory();
+            return this._instance;
+        }
+
+        return this._factory();
     }
 }
