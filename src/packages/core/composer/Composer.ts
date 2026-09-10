@@ -11,8 +11,13 @@ export class Composer
 
     public compose(): Container
     {
-        for(const value of this._registerObject){
-            
+        const providers = [];
+
+        for(const key in this._registerObject){
+            provider[key] = this._registerObject[key];
+            providers.push(provider);
         }
+
+        return new Container(providers);
     }
 }
