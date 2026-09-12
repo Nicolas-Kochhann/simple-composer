@@ -1,21 +1,25 @@
 import { Provider } from "../provider/Provider.js";
 
-export class Container 
+export class Container<T>
 {
     [key: string]: Provider<T>;
     
-    constructor(providers: Provider<T>[]){
-        return new Proxy(this, {
-            get(container, key: string){
-                if (key in container){
-                    return container[key];
-                }
+    constructor(providers: Provider<unknown>[]){
+       for(const provider of providers){
 
-                return never;
-            },
-        });
+       } 
     }
 
-    createProperty(factory: Factory<T>, singleton)
+    private createProxy(): Container<T>
+    {
+        return new Proxy(this, {
+            get(container, key: keyof typeof container | string | symbol){
+                if (key in container){
+                    return (container as any)[key];
+                }
 
+                return key as never;
+            }
+        });
+    }
 }

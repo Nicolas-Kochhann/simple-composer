@@ -1,1 +1,1 @@
-export type Factory<T> = () => T;
+export type Factory<T = unknown> = () => T;
