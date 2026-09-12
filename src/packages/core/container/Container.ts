@@ -1,12 +1,16 @@
+import { UncomposedProvider } from "../composer/composer.js";
 import { Provider } from "../provider/Provider.js";
 
 export class Container<T>
 {
     [key: string]: Provider<T>;
     
-    constructor(providers: Provider<unknown>[]){
-       for(const provider of providers){
+    constructor(uncomposedProviders: UncomposedProvider<T>[] )
+    {
+       for(const uncomposedProvider of uncomposedProviders){
+            const { key, provider } = uncomposedProvider;
 
+            this[key] = provider;
        } 
     }
 
