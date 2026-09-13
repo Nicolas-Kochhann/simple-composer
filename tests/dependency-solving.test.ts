@@ -12,15 +12,16 @@ class FunctionCallingService
 }
 
 const composer = new Composer({
-    myLittleFunction: () => {
-        return () => { console.log('Greetings!!!') }
+    myLittleFunction: {
+        factory: () => {
+            return () => { console.log('Greetings!!!') }
+        },
+        singleton: false,
+        hidden: true
     },
 
     functionCallingService: ({ myLittleFunction }) => new FunctionCallingService(myLittleFunction as any)
 });
 
 const container = composer.compose();
-
-container.myLittleFunction();
-
 container.functionCallingService.execute();

@@ -6,7 +6,7 @@ const container = new Composer({
     junior: {
         factory: () => ({ name: 'Nícolas Kochhann' }),
         singleton: true,
-        hidden: true
+        hidden: false
     }
 }).compose();
 
