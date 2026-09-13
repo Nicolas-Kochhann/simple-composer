@@ -9,17 +9,18 @@ export class Container<T>
     {
        for(const uncomposedProvider of uncomposedProviders){
             const { key, provider } = uncomposedProvider;
-
             this[key] = provider;
-       } 
+       }
+
+       return Container.createProxy(this);
     }
 
-    private createProxy(): Container<T>
+    private static createProxy<T>(container: Container<T>): Container<T>
     {
-        return new Proxy(this, {
-            get(container, key: keyof typeof container | string | symbol){
+        return new Proxy(container, {
+            get(container, key: keyof typeof container | string | symbol, receiver){
                 if (key in container){
-                    return (container as any)[key];
+                    return (container as any)[key].resolve(receiver);
                 }
 
                 return key as never;

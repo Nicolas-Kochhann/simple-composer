@@ -1,4 +1,4 @@
-import { Factory } from "./provider";
+import { DependencyContainer, Factory } from "./provider.js";
 
 export class Provider<T>
 {
@@ -14,15 +14,15 @@ export class Provider<T>
         this._hidden = hidden;
     }
 
-    public resolve(): T 
+    public resolve(container: DependencyContainer): T 
     {
         if (this._singleton){
             if(this._instance) return this._instance;
             
-            this._instance = this._factory();
+            this._instance = this._factory(container);
             return this._instance!;
         }
 
-        return this._factory();
+        return this._factory(container);
     }
 }

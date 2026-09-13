@@ -1,3 +1,4 @@
+import { ComposedContainer } from "../container/container.js";
 import { Container } from "../container/Container.js";
 import { Factory } from "../provider/provider.js";
 import { Provider } from "../provider/Provider.js";
@@ -12,7 +13,7 @@ export class Composer<T extends RegisterObject>
         this._registerObject = registerObject;
     }
 
-    public compose(): Container<T>
+    public compose(): ComposedContainer<T>
     {
         const providers: UncomposedProvider<T>[] = [];
 
@@ -34,6 +35,6 @@ export class Composer<T extends RegisterObject>
             providers.push({ key: key, provider: provider });
         }
 
-        return new Container<T>(providers);
+        return new Container(providers) as ComposedContainer<T>;
     }
 }

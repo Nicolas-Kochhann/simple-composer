@@ -32,5 +32,8 @@
   },
   "scripts": {
     "test": "test"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.13"
   }
 }
