@@ -25,7 +25,7 @@ export class Container<T>
 
                 return key as never;
             },
-            set(container, key: keyof typeof container | string | symbol): never
+            set(): never
             {
                 throw new Error("You can't set a value to a container provider");
             }

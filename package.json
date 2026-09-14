@@ -12,8 +12,11 @@
     "service-provider",
     "provider",
     "app-container",
+    "app",
     "typescript",
-    "simple"
+    "simple",
+    "dependency",
+    "dependency-composition"
   ],
   "homepage": "https://github.com/Nicolas-Kochhann/simple-composer#readme",
   "bugs": {
