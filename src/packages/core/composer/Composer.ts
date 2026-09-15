@@ -4,15 +4,34 @@ import { Factory } from "../provider/provider.js";
 import { Provider } from "../provider/Provider.js";
 import { RegisterObject, UncomposedProvider } from "./composer.js";
 
+/**
+ * Converts a dependency registry into a lazily resolved container.
+ *
+ * @typeParam T The registry shape used to infer the composed container.
+ */
 export class Composer<T extends RegisterObject>
 {
     private _registerObject: T;
 
+    /**
+     * Creates a composer for the provided dependency registry.
+     *
+     * @param registerObject Dependency factories and provider configurations.
+     */
     constructor(registerObject: T)
     {
         this._registerObject = registerObject;
     }
 
+    /**
+     * Composes the registry into a container.
+     *
+     * Providers are resolved lazily when their corresponding container
+     * properties are accessed. The returned type exposes resolved values and
+     * omits providers configured with `hidden: true`.
+     *
+     * @returns A container whose properties are resolved dependency values.
+     */
     public compose(): ComposedContainer<T>
     {
         const providers: UncomposedProvider<T>[] = [];
