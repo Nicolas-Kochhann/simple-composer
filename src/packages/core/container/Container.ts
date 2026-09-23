@@ -8,7 +8,7 @@ import { Provider } from "../provider/Provider.js";
  */
 export class Container<T>
 {
-    [key: string]: Provider<T>;
+    [key: string]: Provider<T, unknown>;
     
     /**
      * Creates a container from uncomposed providers.

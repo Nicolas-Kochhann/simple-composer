@@ -5,10 +5,10 @@ import { DependencyContainer, Factory } from "./provider.js";
  *
  * @typeParam T The value returned by the provider's factory.
  */
-export class Provider<T>
+export class Provider<TRegistry, TValue>
 {
-    private _instance?: T;
-    private _factory: Factory<T>;
+    private _instance?: TValue;
+    private _factory: Factory<TRegistry, TValue>;
     private _singleton: boolean;
     private _hidden: boolean;
 
@@ -19,7 +19,11 @@ export class Provider<T>
      * @param singleton Whether to cache and reuse the first resolved value.
      * @param hidden Whether the provider is hidden from the composed container's public type.
      */
-    constructor(factory: Factory<T>, singleton: boolean, hidden: boolean)
+    constructor(
+        factory: Factory<TRegistry, TValue>,
+        singleton: boolean,
+        hidden: boolean
+    )
     {
         this._factory = factory;
         this._singleton = singleton;
@@ -32,10 +36,10 @@ export class Provider<T>
      * @param container Container passed to the factory for dependency injection.
      * @returns The newly created value, or the cached value for a singleton provider.
      */
-    public resolve(container: DependencyContainer): T 
+    public resolve(container: DependencyContainer<TRegistry>): TValue
     {
         if (this._singleton){
-            if(this._instance) return this._instance;
+            if(this._instance !== undefined) return this._instance;
             
             this._instance = this._factory(container);
             return this._instance!;

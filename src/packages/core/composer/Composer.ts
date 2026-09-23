@@ -9,18 +9,37 @@ import { RegisterObject, UncomposedProvider } from "./composer.js";
  *
  * @typeParam T The registry shape used to infer the composed container.
  */
-export class Composer<T extends RegisterObject>
+export class Composer<T extends RegisterObject<any> = {}>
 {
-    private _registerObject: T;
+    private _registerObject: T = {} as T;
 
     /**
      * Creates a composer for the provided dependency registry.
      *
      * @param registerObject Dependency factories and provider configurations.
      */
-    constructor(registerObject: T)
+    private constructor(registerObject: T)
     {
         this._registerObject = registerObject;
+    }
+
+    public static create(): Composer
+    {
+        return new Composer({});
+    }
+
+    public register<const R extends Record<string, Factory<T, any> | {
+            factory: Factory<T, any>;
+            singleton?: boolean;
+            hidden?: boolean;
+        }>>(registration: R): Composer<T & R>
+    {
+        const registerObject = {
+            ...this._registerObject,
+            ...registration
+        } as T & R;
+
+        return new Composer(registerObject);
     }
 
     /**
@@ -37,7 +56,7 @@ export class Composer<T extends RegisterObject>
         const providers: UncomposedProvider<T>[] = [];
 
         for(const key in this._registerObject){
-            let factory: Factory<unknown>;
+            let factory: Factory<T, unknown>;
             let isSingleton = false;
             let isHidden = false;
 
@@ -50,7 +69,11 @@ export class Composer<T extends RegisterObject>
                 factory = this._registerObject[key];
             }
 
-            const provider = new Provider<ReturnType<typeof factory>>(factory, isSingleton, isHidden);
+            const provider = new Provider<T, ReturnType<typeof factory>>(
+                factory,
+                isSingleton,
+                isHidden
+            );
             providers.push({ key: key, provider: provider });
         }
 
