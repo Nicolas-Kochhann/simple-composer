@@ -36,7 +36,7 @@ export class Container<T>
                     return (container as any)[key].resolve(receiver);
                 }
 
-                return key as never;
+                return undefined as never;
             },
             set(): never
             {
