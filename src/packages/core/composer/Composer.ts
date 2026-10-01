@@ -60,13 +60,15 @@ export class Composer<T extends RegisterObject<any> = {}>
             let isSingleton = false;
             let isHidden = false;
 
-            if(typeof this._registerObject[key] !== 'function'){
+            if(typeof this._registerObject[key] === 'object' && 'factory' in this._registerObject[key]){
                 factory = this._registerObject[key].factory;
 
                 if(this._registerObject[key].singleton) isSingleton = true;
                 if(this._registerObject[key].hidden) isHidden = true;
-            } else {
+            } else if (typeof this._registerObject[key] === 'function'){
                 factory = this._registerObject[key];
+            } else {
+                throw new TypeError(`Invalid registration entry for key "${key}". Expected a factory function or a provider configuration object.`);
             }
 
             const provider = new Provider<T, ReturnType<typeof factory>>(
