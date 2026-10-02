@@ -3,7 +3,12 @@ import { DependencyContainer, Factory } from "./provider.js";
 /**
  * Stores a dependency factory and resolves its value on demand.
  *
- * @typeParam T The value returned by the provider's factory.
+ * Providers are transient by default: the factory runs on every
+ * {@link Provider.resolve | resolve()} call. When `singleton` is enabled, the
+ * first result is cached and reused.
+ *
+ * @typeParam TRegistry The registry whose entries the factory can inject.
+ * @typeParam TValue The value returned by the provider's factory.
  */
 export class Provider<TRegistry, TValue>
 {
@@ -19,6 +24,7 @@ export class Provider<TRegistry, TValue>
      * @param factory Function used to create the dependency value.
      * @param singleton Whether to cache and reuse the first resolved value.
      * @param hidden Whether the provider is hidden from the composed container's public type.
+     * This is type-level only; the value stays readable at runtime and injectable into factories.
      */
     constructor(
         factory: Factory<TRegistry, TValue>,
@@ -34,8 +40,16 @@ export class Provider<TRegistry, TValue>
     /**
      * Resolves the dependency using the supplied container for injection.
      *
+     * @remarks
+     * - Transient providers call the factory on every invocation.
+     * - Singleton providers call the factory once and cache the result, including
+     *   falsy values, `null` and `undefined`.
+     * - If the factory throws, nothing is cached and the next call retries.
+     *
      * @param container Container passed to the factory for dependency injection.
      * @returns The newly created value, or the cached value for a singleton provider.
+     * @throws Rethrows, unchanged, any error thrown by the factory. Circular
+     * dependencies are not detected and overflow the stack with a `RangeError`.
      */
     public resolve(container: DependencyContainer<TRegistry>): TValue
     {

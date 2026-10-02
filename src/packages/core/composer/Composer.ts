@@ -5,9 +5,25 @@ import { Provider } from "../provider/Provider.js";
 import { RegisterObject, UncomposedProvider } from "./composer.js";
 
 /**
- * Converts a dependency registry into a lazily resolved container.
+ * Builds a dependency registry step by step and converts it into a lazily
+ * resolved container.
+ *
+ * Instances are immutable: {@link Composer.register | register()} returns a new
+ * `Composer` whose type `T` includes the newly registered entries.
  *
  * @typeParam T The registry shape used to infer the composed container.
+ *
+ * @example
+ * ```ts
+ * const container = Composer.create()
+ *     .register({ config: () => ({ port: 3000 }) })
+ *     .register({
+ *         server: { factory: ({ config }) => new Server(config.port), singleton: true }
+ *     })
+ *     .compose();
+ *
+ * container.server; // created on first read, then reused
+ * ```
  */
 export class Composer<T extends RegisterObject<any> = {}>
 {
@@ -16,6 +32,8 @@ export class Composer<T extends RegisterObject<any> = {}>
     /**
      * Creates a composer for the provided dependency registry.
      *
+     * Private; use {@link Composer.create} to obtain an instance.
+     *
      * @param registerObject Dependency factories and provider configurations.
      */
     private constructor(registerObject: T)
@@ -23,11 +41,33 @@ export class Composer<T extends RegisterObject<any> = {}>
         this._registerObject = registerObject;
     }
 
+    /**
+     * Creates an empty composer.
+     *
+     * @returns A composer with no registered entries.
+     */
     public static create(): Composer
     {
         return new Composer({});
     }
 
+    /**
+     * Registers dependencies and returns a new composer; the current one is not
+     * modified.
+     *
+     * Each entry is either a factory (transient: runs on every read) or a
+     * provider configuration `{ factory, singleton?, hidden? }`. Factories receive
+     * the container with every entry registered so far (including this call's
+     * predecessors), fully typed.
+     *
+     * @remarks
+     * - Registering an existing key replaces it; the last registration wins.
+     * - Entries are not validated here. Invalid ones fail in {@link Composer.compose}.
+     *
+     * @typeParam R The entries being registered, inferred as literal types.
+     * @param registration Object mapping keys to factories or provider configurations.
+     * @returns A new composer whose registry is the previous one extended with `registration`.
+     */
     public register<const R extends Record<string, Factory<T, any> | {
             factory: Factory<T, any>;
             singleton?: boolean;
@@ -50,6 +90,8 @@ export class Composer<T extends RegisterObject<any> = {}>
      * omits providers configured with `hidden: true`.
      *
      * @returns A container whose properties are resolved dependency values.
+     * @throws {TypeError} If an entry is neither a factory function nor an
+     * object with a `factory` property. Factories themselves are not invoked here.
      */
     public compose(): ComposedContainer<T>
     {

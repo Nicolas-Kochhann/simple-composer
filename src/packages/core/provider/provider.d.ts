@@ -1,22 +1,46 @@
 import { Registry } from "../composer/composer.js";
 
 /**
- * Creates a dependency value from the current container.
+ * Function that creates a dependency value.
  *
- * @typeParam T The value produced by the factory.
+ * It receives the dependency container, so it can read any entry registered
+ * before it (including `hidden` ones). Reading an entry runs its factory, or
+ * returns the cached value if that entry is a singleton.
+ *
+ * @typeParam TRegistry The registry whose entries are available for injection.
+ * @typeParam TValue The value produced by the factory.
+ *
+ * @example
+ * ```ts
+ * Composer.create()
+ *     .register({ config: () => ({ port: 3000 }) })
+ *     .register({ server: ({ config }) => new Server(config.port) });
+ * ```
  */
-/** Creates a dependency value from the current container. */
 export type Factory<TRegistry, TValue = unknown> = (
     container: DependencyContainer<TRegistry>
 ) => TValue;
 
-/** Container-like object available to dependency factories for injection. */
-/** Container available to dependency factories for injection. */
+/**
+ * Read-only view of the registry passed to factories for injection.
+ *
+ * Unlike {@link ComposedContainer}, hidden entries are included.
+ * Properties are resolved lazily when read.
+ *
+ * @typeParam T The registry whose entries are exposed.
+ */
 export type DependencyContainer<T> = {
     readonly [K in keyof T]: ResolvedProvider<T[K]>
 };
 
-/** Resolves a registry entry to the value exposed by the composed container. */
+/**
+ * Resolves a registry entry to the value exposed by the container.
+ *
+ * A factory resolves to its return type; a provider configuration
+ * (`{ factory, singleton?, hidden? }`) resolves to its factory's return type.
+ *
+ * @typeParam T A registry entry: a {@link Factory} or a {@link Registry}.
+ */
 export type ResolvedProvider<T> = T extends Factory<any, infer R>
     ? R
     : T extends Registry<any, infer R>
