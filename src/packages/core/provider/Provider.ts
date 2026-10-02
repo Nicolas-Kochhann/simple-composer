@@ -11,6 +11,7 @@ export class Provider<TRegistry, TValue>
     private _factory: Factory<TRegistry, TValue>;
     private _singleton: boolean;
     private _hidden: boolean;
+    private _initialized = false;
 
     /**
      * Creates a provider.
@@ -39,9 +40,10 @@ export class Provider<TRegistry, TValue>
     public resolve(container: DependencyContainer<TRegistry>): TValue
     {
         if (this._singleton){
-            if(this._instance !== undefined) return this._instance;
+            if(this._initialized) return this._instance as TValue;
             
             this._instance = this._factory(container);
+            this._initialized = true;
             return this._instance!;
         }
 
