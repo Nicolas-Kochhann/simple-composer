@@ -1,6 +1,6 @@
 {
   "name": "stitchbox",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "Simple, type-safe app composition for TypeScript.",
   "keywords": [
     "compose",
@@ -16,15 +16,18 @@
     "typescript",
     "simple",
     "dependency",
-    "dependency-composition"
+    "dependency-composition",
+    "stitch",
+    "box",
+    "stitchbox"
   ],
-  "homepage": "https://github.com/Nicolas-Kochhann/simple-composer#readme",
+  "homepage": "https://github.com/nkochhann/stitchbox#readme",
   "bugs": {
-    "url": "https://github.com/Nicolas-Kochhann/simple-composer/issues"
+    "url": "https://github.com/nkochhann/stitchbox/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nicolas-Kochhann/simple-composer.git"
+    "url": "git+https://github.com/nkochhann/stitchbox.git"
   },
   "license": "MIT",
   "author": "Nícolas Kochhann",
@@ -32,6 +35,11 @@
   "main": "index.ts",
   "directories": {
     "test": "tests"
+  },
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "default": "./dist/index.js"
   },
   "files": [
     "dist"

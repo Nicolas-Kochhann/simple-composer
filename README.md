@@ -1,6 +1,6 @@
 # Stitchbox
 
-Type-safe, lazy dependency composition for TypeScript. Stitch your application together without decorators, tokens, or reflection—just typed factories.
+Type-safe, lazy app composition for TypeScript. Stitch your application together without decorators, tokens, or reflection—just typed factories.
 
 Stitchbox helps you build a composition root by registering dependencies in layers and composing them into a typed container when your application starts.
 
