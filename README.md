@@ -7,10 +7,7 @@ Stitchbox helps you build a composition root by registering dependencies in laye
 ## Why Stitchbox?
 
 - **Lazy**: factories run only when their values are read.
-- **Immutable**: every `register()` call returns a new `Composer`.
 - **Type-safe**: dependencies and the composed container are inferred from registrations.
-- **Flexible**: use transient factories or cached singleton providers.
-- **Private by type**: hide implementation details and configuration from the public container type.
 - **Zero magic**: no decorators, metadata, tokens, or runtime reflection.
 
 ## Quick start
