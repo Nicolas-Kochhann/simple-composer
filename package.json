@@ -34,12 +34,13 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tsx --test ./tests/**/*.test.ts",
+    "test": "npm run test:unit && npm run test:types",
     "test:unit": "tsx --test ./tests/unit/*.test.ts",
-    "test:types": "tsx --test ./tests/types/*.test.ts"
+    "test:types": "tsc -p tests/types/tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
+    "expect-type": "^1.4.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }
