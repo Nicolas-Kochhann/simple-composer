@@ -9,8 +9,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "rootDir": "./src/packages/core/",
     "outDir": "./dist",
-    "rootDir": "./src",
     "skipLibCheck": true,
     "noEmitOnError": true
   },

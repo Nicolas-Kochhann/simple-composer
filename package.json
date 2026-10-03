@@ -1,7 +1,7 @@
 {
-  "name": "simple-composer",
-  "version": "1.0.0",
-  "description": "Simple, type-safe dependency composition for TypeScript.",
+  "name": "stitchbox",
+  "version": "0.1.0",
+  "description": "Simple, type-safe app composition for TypeScript.",
   "keywords": [
     "compose",
     "composer",
@@ -33,10 +33,15 @@
   "directories": {
     "test": "tests"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "npm run test:unit && npm run test:types",
     "test:unit": "tsx --test ./tests/unit/*.test.ts",
-    "test:types": "tsc -p tests/types/tsconfig.json"
+    "test:types": "tsc -p tests/types/tsconfig.json",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",

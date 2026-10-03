@@ -1,13 +1,24 @@
-# simple-composer
+# Stitchbox
 
-Simple, type-safe dependency composition for TypeScript. No decorators, no tokens, no reflection: just typed factories.
+Type-safe, lazy dependency composition for TypeScript. Stitch your application together without decorators, tokens, or reflection—just typed factories.
+
+Stitchbox helps you build a composition root by registering dependencies in layers and composing them into a typed container when your application starts.
+
+## Why Stitchbox?
+
+- **Lazy**: factories run only when their values are read.
+- **Immutable**: every `register()` call returns a new `Composer`.
+- **Type-safe**: dependencies and the composed container are inferred from registrations.
+- **Flexible**: use transient factories or cached singleton providers.
+- **Private by type**: hide implementation details and configuration from the public container type.
+- **Zero magic**: no decorators, metadata, tokens, or runtime reflection.
 
 ## Quick start
 
 Chain `register()` calls, then call `compose()`. Each factory receives everything registered **before** it, fully typed.
 
 ```ts
-import { Composer } from "simple-composer";
+import { Composer } from "stitchbox";
 
 const container = Composer.create()
     .register({ config: () => ({ host: "localhost", port: 5432 }) })
@@ -17,10 +28,6 @@ const container = Composer.create()
 
 container.users; // UserRepository
 ```
-
-- **Lazy**: a factory runs only when its property is read (directly or through another factory).
-- **Immutable**: `register()` returns a new `Composer`; the original is untouched.
-- **Typed**: the container type is inferred from your registrations.
 
 ## Registering entries
 
@@ -166,4 +173,8 @@ const container = domain.compose();
 
 - `Composer<T>`: the builder. `T` grows with each `register()`.
 - `ComposedContainer<T>`: the result of `compose()`, with resolved values and hidden entries omitted.
-- `Factory<TRegistry, TValue>`: `(container) => TValue`.
+- `Factory<TRegistry, TValue>`: a function that creates a value and receives the dependency container.
+- `DependencyContainer<T>`: the read-only container passed to factories. It includes hidden entries and resolves values lazily.
+- `RegisterObject<T>`: the object accepted by `register()`, mapping dependency names to factories or provider configurations.
+- `Registry<TRegistry, TValue>`: provider configuration with a `factory`, optional `singleton`, and optional `hidden` flag.
+
